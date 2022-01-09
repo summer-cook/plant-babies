@@ -9,7 +9,18 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
   return (
-      <Drawer.Navigator>
+      <Drawer.Navigator
+        screenOptions={{
+          drawerActiveTintColor: '#fff',
+          drawerActiveBackgroundColor: '#AAC9CF',
+          overlayColor: '#C4C4C4',
+          drawerItemStyle: {
+            borderRadius: 4,
+            margin: 0,
+            padding: 10
+          },
+        }}
+        >
         <Drawer.Screen name="My Plants" component={StackNavigator} />
         <Drawer.Screen name="Add New Plant" component={NewPlant} />
         <Drawer.Screen name="Calendar" component={Calendar} />
