@@ -1,8 +1,20 @@
-import React from "react"
-import { View, TouchableOpacity, StyleSheet, } from "react-native";
+import React, {useState, useEffect} from "react"
+import { View, StyleSheet, Text} from "react-native";
 import CustomButton from "../components/CustomButton";
+import Axios from 'axios'
 
 function MyPlants({ navigation }) {
+
+  const [plants, setPlants] = useState([])
+
+  useEffect(()=>{
+    Axios.get('http://localhost:3000/plant/index')
+      .then(res => {
+        setPlants(res.data)
+      })
+      .catch(e => setPlants(e.message))
+  }, [])
+
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <CustomButton 
@@ -13,6 +25,13 @@ function MyPlants({ navigation }) {
         onPress={() => navigation.navigate("Plant")}
         title="Go to plant"
       />
+      <Text>
+      {plants.map((plant) => {
+        return(
+          plant.name
+        )
+      })}
+      </Text>
     </View>
   );
 }
