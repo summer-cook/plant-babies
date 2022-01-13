@@ -1,6 +1,6 @@
 import React from "react"
 import { View, TouchableOpacity, StyleSheet, } from "react-native";
-import CustomButton from "../components/Button";
+import CustomButton from "../components/CustomButton";
 
 function MyPlants({ navigation }) {
   return (
