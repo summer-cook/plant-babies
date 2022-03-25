@@ -1,29 +1,31 @@
 import React from "react"
-import { Pressable, StyleSheet, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity, StyleSheet, Text } from "react-native";
 
-function Button({ title, onPress }) {
-  return (
-    <Pressable 
-      style={styles.button}
-      onPress={onPress}
-      color='#fff'>
-      <Text style={styles.text}>{title}</Text>
-    </Pressable>
-  );
-}
+function CustomButton({ title, onPress, fontSize }) {
+  const styles = StyleSheet.create({
+    button: {
+      backgroundColor: '#AAC9CF',
+      borderRadius: 4
+    },
+    text: {
+      textTransform: 'uppercase',
+      color: '#fff',
+      letterSpacing: 1,
+      padding: 10,
+      textAlign: 'center',
+      fontSize: fontSize
+    },
+  });
 
-export default Button
+    return (
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={onPress}
+        color='#fff'
+        activeOpacity={0.8}>
+        <Text style={styles.text}>{title}</Text>
+      </TouchableOpacity>
+    );
+  }
 
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#AAC9CF',
-    borderRadius: 4
-  },
-  text: {
-    textTransform: 'uppercase',
-    color: '#fff',
-    letterSpacing: 1,
-    padding: 10
-  },
-});
+export default CustomButton

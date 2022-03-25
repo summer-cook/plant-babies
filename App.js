@@ -21,12 +21,15 @@ const customTextProps = {
   }
 };
 
-
 const Stack = createStackNavigator();
 
 export default function App() {
   let [fontsLoaded] = useFonts({
-    Comfortaa_700Bold
+    Comfortaa_700Bold,
+    Comfortaa_300Light,
+    Comfortaa_400Regular,
+    Comfortaa_500Medium,
+    Comfortaa_600SemiBold
   });
 
   if (!fontsLoaded) {
@@ -37,13 +40,15 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator
           options={{ headerStyle: {
-            backgroundColor: '#E4F6E9'}}}>
+            backgroundColor: '#E4F6E9'
+          }}}
+        >
           <Stack.Screen
             name="Plant Babies 🌿"
             component={DrawerNavigator}
             options={{ headerStyle: {
               backgroundColor: '#E4F6E9'
-           } }}
+            }}}
           />
         </Stack.Navigator>
       </NavigationContainer>
