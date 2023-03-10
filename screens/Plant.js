@@ -1,13 +1,97 @@
 import React from "react"
-import { Button, View } from "react-native";
+import CustomButton from '../components/CustomButton'
+import { View, StyleSheet, Image, Text, Button } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-function Plant({ navigation }) {
+function Plant({ route, navigation }) {
+  const plant = route.params.plant;
+  console.log(plant)
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button onPress={navigation.openDrawer} title="Open navigation drawer" />
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
+    <View style={styles.plantContainer}>
+      <View style={styles.plantInfo}>
+        <Image
+          style={styles.plantImage}
+          source={{
+            uri: `http://localhost:3000/${plant.image_url}`
+          }}
+        />
+        <View>
+          <Text style={styles.plantName}>
+            {plant.name[0].toUpperCase()}{plant.name.slice(1)}
+          </Text>
+        </View>
+        <View>
+          <Text style={styles.lastWateredText}>
+              Last watered: {plant.last_time_watered}
+          </Text>
+          <Text style={styles.wateringText}>
+            Needs watering today 💚
+          </Text>
+          <Text style={styles.description}>
+            {plant.description}
+          </Text>
+        </View>
+      </View>
+        <CustomButton 
+          title='Water Now'
+          onPress={() => navigation.goBack()}
+          fontSize={20} 
+        />
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.goBackLink}>
+            Go back to my plants
+          </Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 export default Plant
+
+const styles = StyleSheet.create({
+  plantContainer: {
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 0,
+    flex:1
+  },
+  plantInfo: {
+    textAlign: 'center',
+    width: 300
+  },
+  plantName: {
+    paddingTop: 20,
+    fontSize: 30,
+    color: '#333432',
+    textAlign: 'center'
+  },
+  plantImage: {
+    width: 300,
+    height: 300,
+    borderRadius: 5,
+    borderColor: '#E5E5E5',
+    borderWidth: 2,
+  },
+  lastWateredText: {
+    paddingTop: 10,
+    fontFamily: 'Comfortaa_300Light',
+    fontSize: 16,
+    textAlign: 'center'
+  },
+  wateringText: {
+    color: '#333432',
+    fontSize: 14,
+    textAlign: 'center'
+  },
+  waterPlantButton: {
+    fontSize: 20
+  },
+  goBackLink: {
+    fontSize: 14
+  },
+  description: {
+    textAlign: 'center',
+    paddingVertical: 10
+  }
+});

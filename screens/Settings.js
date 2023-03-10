@@ -1,11 +1,14 @@
 import React from "react"
-import { Button, View } from "react-native";
+import { View, Text } from "react-native";
+import CustomButton from "../components/CustomButton";
 
 function Calendar({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button onPress={navigation.openDrawer} title="Open navigation drawer" />
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
+      <Text>Coming soon!</Text>
+      <CustomButton 
+        onPress={() => navigation.goBack()}
+        title="Go back home" />
     </View>
   );
 }

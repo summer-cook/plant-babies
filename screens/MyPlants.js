@@ -1,33 +1,41 @@
-import React from "react"
-import { View, TouchableOpacity, StyleSheet, } from "react-native";
-import CustomButton from "../components/Button";
+import React, {useState, useEffect} from "react"
+import {ScrollView} from "react-native";
+import PlantListItem from "../components/PlantListItem";
+import Axios from 'axios'
 
-function MyPlants({ navigation }) {
+function MyPlants() {
+
+  const [isLoading, setLoading] = useState(true);
+  const [plants, setPlants] = useState([])
+
+  useEffect(() => {
+    Axios.get('http://localhost:3000/api/plants')
+      .then(({ data }) => {
+        if (data){
+          let plantArray = data
+          setPlants(plantArray)
+        }
+      })
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <CustomButton 
-        onPress={navigation.openDrawer}
-        title="Open navigation drawer"
-      />
-      <CustomButton 
-        onPress={() => navigation.navigate("Plant")}
-        title="Go to plant"
-      />
-    </View>
+    <ScrollView>
+      {plants.map((plant, index) => {
+        return(
+          <PlantListItem 
+            key={index}
+            id={plant.id}
+            plant={plant}
+            style={{backgroundColor: index % 2 === 0 ? '#000' : '#ccc'
+            }} 
+          />
+        )
+      })}
+
+    </ScrollView>
   );
 }
 
 export default MyPlants
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#AAC9CF',
-    borderRadius: 4
-  },
-  text: {
-    textTransform: 'uppercase',
-    color: '#fff',
-    letterSpacing: 1,
-    padding: 10
-  },
-});
