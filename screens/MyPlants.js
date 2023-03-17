@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from "react"
-import {ScrollView} from "react-native";
+import React, { useState, useEffect } from "react"
+import { ScrollView } from "react-native";
 import PlantListItem from "../components/PlantListItem";
 import Axios from 'axios'
 
@@ -18,7 +18,7 @@ function MyPlants() {
       })
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
-  }, []);
+  }, [plants]);
 
   return (
     <ScrollView>

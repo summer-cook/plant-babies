@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "Plant Babies",
+    "slug": "plant-babies",
+    "ios": {
+      "bundleIdentifier": "com.summer.plant-babies",
+      "googleServicesFile": "./GoogleService-Info.plist"
+    }
+  }
+}
