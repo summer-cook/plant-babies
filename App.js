@@ -1,11 +1,12 @@
 import React from "react";
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import { app, database, storage } from './firebaseConfig';
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack"
+import { NavigationContainer } from "@react-navigation/native"
 import DrawerNavigator from './navigation/DrawerNavigator'
-import { setCustomText, setCustomTouchableOpacity } from 'react-native-global-props';
 import AppLoading from "expo-app-loading";
+import setDefaultProps from 'react-native-simple-default-props'
+
 import {
   useFonts,
   Comfortaa_300Light,
@@ -15,16 +16,9 @@ import {
   Comfortaa_700Bold
 } from '@expo-google-fonts/comfortaa';
 
-const customTextProps = {
-  style: {
-    fontFamily: 'Comfortaa_700Bold',
-    color: '#6D6D6D'
-  }
-};
-
 const Stack = createStackNavigator();
 
-export default function App() {
+function App() {
   let [fontsLoaded] = useFonts({
     Comfortaa_700Bold,
     Comfortaa_300Light,
@@ -33,26 +27,39 @@ export default function App() {
     Comfortaa_600SemiBold
   });
 
+  const defaultTextProps = {
+    style: {
+      fontFamily: 'Comfortaa_700Bold',
+      color: '#6D6D6D',
+    },
+  }
+
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
-    setCustomText(customTextProps);
+    setDefaultProps(Text, defaultTextProps);
     return (
       <NavigationContainer>
         <Stack.Navigator
-          options={{ headerStyle: {
-            backgroundColor: '#E4F6E9'
-          }}}
+          options={{
+            headerStyle: {
+              backgroundColor: '#E4F6E9'
+            }
+          }}
         >
           <Stack.Screen
             name="Plant Babies 🌿"
             component={DrawerNavigator}
-            options={{ headerStyle: {
-              backgroundColor: '#E4F6E9'
-            }}}
+            options={{
+              headerStyle: {
+                backgroundColor: '#E4F6E9'
+              }
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>
     );
   }
 }
+
+export default App;
