@@ -1,17 +1,18 @@
 import React from "react";
 import { StyleSheet } from 'react-native'
+import { app, database, storage } from './firebaseConfig';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import DrawerNavigator from './navigation/DrawerNavigator'
 import { setCustomText, setCustomTouchableOpacity } from 'react-native-global-props';
 import AppLoading from "expo-app-loading";
-import { 
+import {
   useFonts,
   Comfortaa_300Light,
   Comfortaa_400Regular,
   Comfortaa_500Medium,
   Comfortaa_600SemiBold,
-  Comfortaa_700Bold 
+  Comfortaa_700Bold
 } from '@expo-google-fonts/comfortaa';
 
 const customTextProps = {

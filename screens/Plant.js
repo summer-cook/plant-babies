@@ -1,12 +1,19 @@
 import React from "react"
 import CustomButton from '../components/CustomButton'
-import { View, StyleSheet, Image, Text, Button } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Image,
+  Text,
+  Button,
+  View
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 function Plant({ route, navigation }) {
   const plant = route.params.plant;
-  console.log(plant)
   return (
+    <ScrollView>
     <View style={styles.plantContainer}>
       <View style={styles.plantInfo}>
         <Image
@@ -32,17 +39,18 @@ function Plant({ route, navigation }) {
           </Text>
         </View>
       </View>
-        <CustomButton 
+        <CustomButton
           title='Water Now'
           onPress={() => navigation.goBack()}
-          fontSize={20} 
+          fontSize={20}
         />
       <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.goBackLink}>
-            Go back to my plants
-          </Text>
+        <Text style={styles.goBackLink}>
+          Go back to my plants
+        </Text>
       </TouchableOpacity>
-    </View>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -58,13 +66,13 @@ const styles = StyleSheet.create({
   },
   plantInfo: {
     textAlign: 'center',
-    width: 300
+    width: 300,
   },
   plantName: {
     paddingTop: 20,
     fontSize: 30,
     color: '#333432',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   plantImage: {
     width: 300,
