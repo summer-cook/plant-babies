@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@expo-google-fonts/comfortaa": "^0.2.0",
+    "@expo-google-fonts/comfortaa": "^0.2.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-native-fontawesome": "^0.2.7",
@@ -16,7 +16,7 @@
     "firebase": "^9.17.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.71.3",
+    "react-native": "0.71.4",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-global-props": "^1.1.5",
     "react-native-reanimated": "~2.14.4",

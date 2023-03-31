@@ -1,41 +1,38 @@
-import React, { useState, useEffect } from "react"
-import { ScrollView } from "react-native";
-import PlantListItem from "../components/PlantListItem";
-import Axios from 'axios'
+import React, { useState, useEffect } from 'react'
+import { ScrollView } from "react-native"
+import PlantListItem from "../components/PlantListItem"
+import { getDatabase, ref, onValue } from 'firebase/database'
 
-function MyPlants() {
-
-  const [isLoading, setLoading] = useState(true);
+const MyPlants = () => {
+  const [isLoading, setLoading] = useState(true)
   const [plants, setPlants] = useState([])
-
   useEffect(() => {
-    Axios.get('http://localhost:3000/api/plants')
-      .then(({ data }) => {
-        if (data){
-          let plantArray = data
-          setPlants(plantArray)
-        }
-      })
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
-  }, [plants]);
+    const dbRef = ref(getDatabase(), 'plants')
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val()
+      const plantList = Object.entries(data).map(([key, value]) => ({id: key, ...value}))
+      setPlants(plantList)
+      setLoading(false)
+    });
+  }, []);
 
   return (
     <ScrollView>
       {plants.map((plant, index) => {
         return(
-          <PlantListItem 
+          <PlantListItem
             key={index}
             id={plant.id}
             plant={plant}
-            style={{backgroundColor: index % 2 === 0 ? '#000' : '#ccc'
-            }} 
+            style={{
+              backgroundColor: index % 2 === 0 ? '#000' : '#ccc'
+            }}
           />
         )
       })}
 
     </ScrollView>
-  );
+  )
 }
 
 export default MyPlants

@@ -1,12 +1,12 @@
 import React from "react"
 import CustomButton from '../components/CustomButton'
-import { 
+import {
   ScrollView,
   StyleSheet,
   Image,
   Text,
   Button,
-  View 
+  View
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -39,10 +39,10 @@ function Plant({ route, navigation }) {
           </Text>
         </View>
       </View>
-        <CustomButton 
+        <CustomButton
           title='Water Now'
           onPress={() => navigation.goBack()}
-          fontSize={20} 
+          fontSize={20}
         />
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Text style={styles.goBackLink}>
@@ -66,13 +66,13 @@ const styles = StyleSheet.create({
   },
   plantInfo: {
     textAlign: 'center',
-    width: 300
+    width: 300,
   },
   plantName: {
     paddingTop: 20,
     fontSize: 30,
     color: '#333432',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   plantImage: {
     width: 300,

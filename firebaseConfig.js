@@ -21,6 +21,6 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
-const database = getDatabase(app)
-const storage = getStorage(app)
+const app = initializeApp(firebaseConfig, {})
+export const database = getDatabase(app)
+export const storage = getStorage(app)
