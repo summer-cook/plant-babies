@@ -1,0 +1,61 @@
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { firebase } from '../firebaseConfig';
+
+export default function LoginScreen() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSignUp = () => {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(() => console.log('User account created'))
+      .catch((err) => setError(err.message));
+  };
+
+  const handleSignIn = () => {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(() => console.log('User signed in'))
+      .catch((err) => setError(err.message));
+  };
+
+  // TODO styling and make this 2 separate screens (or tabs? sign in and sign up should be separate)
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder='Email'
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder='Password'
+        secureTextEntry={true}
+        value={password}
+        onChangeText={setPassword}
+      />
+      <Button title='Sign up' onPress={handleSignUp} />
+      <Button title='Sign in' onPress={handleSignIn} />
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  input: {
+    width: '80%',
+    borderWidth: 1,
+    padding: 10,
+    marginVertical: 10,
+  },
+  error: {
+    color: 'red',
+    marginTop: 10,
+  },
+});
