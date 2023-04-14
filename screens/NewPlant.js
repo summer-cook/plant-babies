@@ -37,27 +37,8 @@ function NewPlant({ navigation }) {
     // Need to check firebase docs to see if there is a way to generate IDs, create date & create time automatically.
     const imageId = Math.random().toString(36).substring(7)
     // TODO: Link the current user here. users should be linked to their plants
-    const ref = firebase.storage().ref().child(`plant-pics/${imageId}`);
-    const snapshot = ref.put(blob)
-    snapshot.on(firebase.storage.TaskEvent.STATE_CHANGED,
-      async () => {
-        try {
-          const url = await snapshot.snapshot.ref.getDownloadURL();
-          setUploading(false);
-          console.log("Download URL: ", url);
-          // TODO fix this- currently we are not ending up with the url in the DB, but we are able to get them in storage.
-          // Save the download URL to the Firebase Realtime Database
-          // const databaseRef = getDatabase();
-          // databaseRef.ref('images').push({ url: url });
-          setImage(url);
-          return url;
-        } catch (error) {
-          setUploading(false);
-          console.log(error);
-          return;
-        }
-      }
-    )
+    const ref = await firebase.storage().ref().child(`plant-pics/${imageId}`);
+    ref.put(blob)
   }
 
   // TODO add the rest of the new plant form.
