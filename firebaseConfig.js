@@ -6,6 +6,7 @@ import { getStorage } from "firebase/storage"
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth';
 import 'firebase/compat/storage'
+import 'firebase/compat/database';
 
 // Optionally import the services that you want to use
 // import {...} from "firebase/auth";
@@ -30,4 +31,4 @@ if (!firebase.apps.length) {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig, {})
-export { app, firebase }
+export { firebase, app }

@@ -2,17 +2,22 @@ import React, { useState, useEffect } from 'react'
 import { ScrollView } from "react-native"
 import PlantListItem from "../components/PlantListItem"
 import { getDatabase, ref, onValue } from 'firebase/database'
+import { getAuth } from 'firebase/auth'
 
 const MyPlants = () => {
   const [isLoading, setLoading] = useState(true)
   const [plants, setPlants] = useState([])
+  const auth = getAuth()
+
   useEffect(() => {
-    const dbRef = ref(getDatabase(), 'plants')
+    const dbRef = ref(getDatabase(), `users/${auth.currentUser.uid}/plants`)
     onValue(dbRef, (snapshot) => {
       const data = snapshot.val()
-      const plantList = Object.entries(data).map(([key, value]) => ({id: key, ...value}))
-      setPlants(plantList)
-      setLoading(false)
+      if (data) {
+        const plantList = Object.entries(data).map(([key, value]) => ({id: key, ...value}))
+        setPlants(plantList)
+        setLoading(false)
+      }
     });
   }, []);
 
@@ -30,7 +35,6 @@ const MyPlants = () => {
           />
         )
       })}
-
     </ScrollView>
   )
 }
