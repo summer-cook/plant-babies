@@ -3,7 +3,8 @@ import { StyleSheet, Text, View, Button, Image, ActivityIndicator} from 'react-n
 import * as ImagePicker from "expo-image-picker"
 import { firebase } from '../firebaseConfig'
 import { getDatabase } from 'firebase/database';
-import { randstr } from '../utils/utilityFunctions';
+//import { getDatabase } from 'firebase/storage';
+//import { randstr } from '../utils/utilityFunctions';
 
 
 
@@ -25,27 +26,16 @@ function NewPlant({ navigation }) {
     console.log(result);
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setImage(result.assets[0].uri)
     }
   }
 
   const uploadImage = async () => {
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function() {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function() {
-        reject(new TypeError('Network request failed'));
-      };
-      xhr.responseType = 'blob';
-      console.log(image, 'image')
-      xhr.open('GET', image, true);
-      xhr.send(null);
-    })
+    const response = await fetch(image)
+    const blob = await response.blob()
     // TODO make this work, need some way to generate an ID
     // Need to check firebase docs to see if there is a way to generate IDs, create date & create time automatically.
-    const imageId = randstr('plant')
+    const imageId = Math.random().toString(36).substring(7)
     // TODO: Link the current user here. users should be linked to their plants
     const ref = firebase.storage().ref().child(`plant-pics/${imageId}`);
     const snapshot = ref.put(blob)
@@ -60,12 +50,10 @@ function NewPlant({ navigation }) {
           // const databaseRef = getDatabase();
           // databaseRef.ref('images').push({ url: url });
           setImage(url);
-          blob.close();
           return url;
         } catch (error) {
           setUploading(false);
           console.log(error);
-          blob.close();
           return;
         }
       }
