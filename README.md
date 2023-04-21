@@ -18,6 +18,3 @@
 - If you see the following when starting the app:
   - `Error: error:0308010C:digital envelope routines::unsupported`
   - set the following env variable in your local shell: `export NODE_OPTIONS=--openssl-legacy-provider`
-
-## Install dependencies
-  - `bundle install`
