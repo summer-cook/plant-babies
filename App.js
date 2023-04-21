@@ -1,10 +1,10 @@
-import React from "react";
+import React from "react"
 import { StyleSheet, Text } from 'react-native'
-import { app, database, storage } from './firebaseConfig';
 import { createStackNavigator } from "@react-navigation/stack"
 import { NavigationContainer } from "@react-navigation/native"
 import DrawerNavigator from './navigation/DrawerNavigator'
-import AppLoading from "expo-app-loading";
+import { AuthProvider } from './context/AuthContext'
+import AppLoading from "expo-app-loading"
 import setDefaultProps from 'react-native-simple-default-props'
 
 import {
@@ -14,9 +14,9 @@ import {
   Comfortaa_500Medium,
   Comfortaa_600SemiBold,
   Comfortaa_700Bold
-} from '@expo-google-fonts/comfortaa';
+} from '@expo-google-fonts/comfortaa'
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator()
 
 function App() {
   let [fontsLoaded] = useFonts({
@@ -25,7 +25,7 @@ function App() {
     Comfortaa_400Regular,
     Comfortaa_500Medium,
     Comfortaa_600SemiBold
-  });
+  })
 
   const defaultTextProps = {
     style: {
@@ -35,10 +35,11 @@ function App() {
   }
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <AppLoading />
   } else {
-    setDefaultProps(Text, defaultTextProps);
+    setDefaultProps(Text, defaultTextProps)
     return (
+      <AuthProvider>
       <NavigationContainer>
         <Stack.Navigator
           options={{
@@ -58,8 +59,9 @@ function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    );
+      </AuthProvider>
+    )
   }
 }
 
-export default App;
+export default App
