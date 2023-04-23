@@ -147,15 +147,15 @@ function NewPlant({ navigation }) {
       </View>
       <DatePicker
         useNativeDriver={true}
-        style={{width: 200}}
         date={lastTimeWatered}
         mode="date"
-        placeholder="select date"
+        placeholder="Last time you watered this plant?"
         format="YYYY-MM-DD"
         minDate="2020-01-01"
         maxDate={today()}
         confirmBtnText="Confirm"
         cancelBtnText="Cancel"
+        style={[theme.input, {width: '80%'}]}
         customStyles={{
           dateIcon: {
             position: 'absolute',
@@ -164,8 +164,9 @@ function NewPlant({ navigation }) {
             marginLeft: 0
           },
           dateInput: {
-            marginLeft: 36
-          }
+            marginLeft: 32,
+            borderColor: 'transparent'
+          },
         }}
         onDateChange={(date) => {setLastTimeWatered(date)}}
       />
