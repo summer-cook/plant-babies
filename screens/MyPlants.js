@@ -3,13 +3,13 @@ import { AuthContext } from '../context/AuthContext';
 import { ScrollView, StyleSheet, Text, View } from "react-native"
 import PlantListItem from "../components/PlantListItem"
 import { getDatabase, ref, onValue } from 'firebase/database'
-//import { getAuth } from 'firebase/auth'
+import { getAuth } from 'firebase/auth'
 
 const MyPlants = () => {
   const [isLoading, setLoading] = useState(true)
   const [plants, setPlants] = useState([])
   const { user } = useContext(AuthContext);
-  //const auth = getAuth()
+  const auth = getAuth()
   console.log(user)
 
   useEffect(() => {
