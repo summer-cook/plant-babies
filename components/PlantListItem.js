@@ -1,59 +1,48 @@
-import React from "react"
+import React, { useContext } from "react"
 import CustomButton from './CustomButton'
 import { View, StyleSheet, Image, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from '@react-navigation/native';
 import { useFonts, Comfortaa_300Light } from '@expo-google-fonts/comfortaa';
 import AppLoading from 'expo-app-loading';
+import { today, getWateringText, timeSince } from '../utils/utilityFunctions'
+import { ThemeContext } from '../context/ThemeContext';
 
-// gets the date today to use to find out whether a plant needs to be watered
-function getDateToday() {
-  var today = new Date();
-  var dd = String(today.getDate()).padStart(2, '0');
-  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-  var yyyy = today.getFullYear();
-  return today = mm + '/' + dd + '/' + yyyy;
-}
-
-// tells you whether or not the plant needs to get watered
-function getWateringText(plant) {
-  if (plant.last_time_watered = getDateToday())
-  return 'Hydrated & happy 🌞'
-}
-
-function PlantListItem({ plant, id}) {
+function PlantListItem({ plant, index}) {
   const navigation = useNavigation();
+  const theme = useContext(ThemeContext);
+
   let [fontsLoaded] = useFonts({ Comfortaa_300Light });
   if (!fontsLoaded) {
     return <AppLoading />;}
   else
   return (
-    <View 
+    <View
       style={{
-        backgroundColor: Number(id) % 2 ? '#fff' : '#FAFAFA',
+        backgroundColor: index % 2 ? theme.colors.white : theme.colors.backgroundGrey,
         flexDirection: "row",
         padding: 10
       }}
     >
-      <TouchableOpacity 
+      <TouchableOpacity
         onPress={() => navigation.navigate('Plant', {plant: plant})}>
         <Image
           style={styles.plantImage}
           source={{
-            uri: `http://localhost:3000/${plant.image_url}`
+            uri: plant.image
           }}
         />
       </TouchableOpacity>
       <View style={styles.plantInfo}>
         <View>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => navigation.navigate('Plant', {plant: plant})}>
             <Text style={styles.plantName}>
               {plant.name[0].toUpperCase()}{plant.name.slice(1)}
             </Text>
           </TouchableOpacity>
           <Text style={styles.lastWateredText}>
-            Last watered: {plant.last_time_watered}
+            Last watered: {timeSince(plant.lastTimeWatered)} ago
           </Text>
         </View>
         <Text style={styles.wateringText}>
@@ -61,10 +50,10 @@ function PlantListItem({ plant, id}) {
         </Text>
       </View>
       <View style={styles.waterPlantButton}>
-        <CustomButton 
+        <CustomButton
           title='Water Now'
           onPress={() => navigation.navigate('Plant', {plant: plant})}
-          fontSize={10} 
+          fontSize={10}
         />
       </View>
     </View>
@@ -89,6 +78,7 @@ const styles = StyleSheet.create({
   },
   plantInfo: {
     flex: 2,
+    marginRight: 10,
     flexDirection: "column",
     justifyContent: "space-between"
   },

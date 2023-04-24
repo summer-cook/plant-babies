@@ -25,7 +25,7 @@ const DrawerNavigator = () => {
         {/* TO DO: Add make it say log out when logged in, and log in when logged out */}
         <Drawer.Screen name="Log In" component={Auth} />
         <Drawer.Screen name="My Plants" component={StackNavigator} />
-        <Drawer.Screen name="Add New Plant" component={NewPlant} />
+        <Drawer.Screen name="Create a New Plant" component={NewPlant} />
         <Drawer.Screen name="Calendar" component={Calendar} />
         <Drawer.Screen name="Settings" component={Settings} />
       </Drawer.Navigator>

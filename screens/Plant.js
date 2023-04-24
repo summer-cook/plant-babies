@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import CustomButton from '../components/CustomButton'
 import {
   ScrollView,
@@ -8,10 +8,12 @@ import {
   Button,
   View
 } from "react-native";
+import { ThemeContext } from '../context/ThemeContext'
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 function Plant({ route, navigation }) {
   const plant = route.params.plant;
+  const theme = useContext(ThemeContext)
   return (
     <ScrollView>
     <View style={styles.plantContainer}>
@@ -19,7 +21,7 @@ function Plant({ route, navigation }) {
         <Image
           style={styles.plantImage}
           source={{
-            uri: `http://localhost:3000/${plant.image_url}`
+            uri: plant.image
           }}
         />
         <View>
@@ -39,11 +41,21 @@ function Plant({ route, navigation }) {
           </Text>
         </View>
       </View>
-        <CustomButton
-          title='Water Now'
-          onPress={() => navigation.goBack()}
-          fontSize={20}
-        />
+      <CustomButton
+        title='Water Now'
+        onPress={() => navigation.goBack()}
+        fontSize={20}
+      />
+      <CustomButton
+        title='Update Plant'
+        onPress={() => navigation.navigate('UpdatePlant', {plant: plant})}
+        backgroundColor={theme.colors.periwinkle}
+      />
+      <CustomButton
+        title='Delete Plant'
+        onPress={() => navigation.goBack()}
+        backgroundColor={theme.colors.red}
+      />
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Text style={styles.goBackLink}>
           Go back to my plants

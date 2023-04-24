@@ -1,9 +1,10 @@
 import React from "react"
 import { StyleSheet, Text } from 'react-native'
 import { createStackNavigator } from "@react-navigation/stack"
-import { NavigationContainer } from "@react-navigation/native"
+import { NavigationContainer, ThemeProvider } from "@react-navigation/native"
 import DrawerNavigator from './navigation/DrawerNavigator'
 import { AuthProvider } from './context/AuthContext'
+import { ThemeContext } from './context/ThemeContext';
 import AppLoading from "expo-app-loading"
 import setDefaultProps from 'react-native-simple-default-props'
 
@@ -40,25 +41,28 @@ function App() {
     setDefaultProps(Text, defaultTextProps)
     return (
       <AuthProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          options={{
-            headerStyle: {
-              backgroundColor: '#E4F6E9'
-            }
-          }}
-        >
-          <Stack.Screen
-            name="Plant Babies 🌿"
-            component={DrawerNavigator}
-            options={{
-              headerStyle: {
-                backgroundColor: '#E4F6E9'
-              }
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+        <ThemeProvider>
+
+          <NavigationContainer>
+            <Stack.Navigator
+              options={{
+                headerStyle: {
+                  backgroundColor: '#E4F6E9'
+                }
+              }}
+            >
+              <Stack.Screen
+                name="Plant Babies 🌿"
+                component={DrawerNavigator}
+                options={{
+                  headerStyle: {
+                    backgroundColor: '#E4F6E9'
+                  }
+                }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </ThemeProvider>
       </AuthProvider>
     )
   }

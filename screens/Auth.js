@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native'
+import { ThemeContext } from '../context/ThemeContext';
 import { firebase } from '../firebaseConfig'
 
 export default function LoginScreen() {
+  const theme = useContext(ThemeContext);
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -76,15 +78,15 @@ export default function LoginScreen() {
   // TODO styling and make this 2 separate screens (or tabs? sign in and sign up should be separate)
   if (!user) {
     return (
-      <View style={styles.container}>
+      <View style={[{flex: 1}, theme.center]}>
         <TextInput
-          style={styles.input}
+          style={[theme.input, theme.formItemSpacing]}
           placeholder="Email"
           value={email}
           onChangeText={setEmail}
         />
         <TextInput
-          style={styles.input}
+          style={[theme.input, theme.formItemSpacing]}
           placeholder="Password"
           secureTextEntry={true}
           value={password}
@@ -99,7 +101,7 @@ export default function LoginScreen() {
 
   // Show the sign out button if there is a user signed in
   return (
-    <View style={styles.container}>
+    <View style={[{flex: 1}, theme.center]}>
       <Text style={styles.text}>You are signed in as {user.email}</Text>
       <Button title="Sign out" onPress={handleSignOut} />
     </View>
@@ -107,17 +109,6 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  input: {
-    width: '80%',
-    borderWidth: 1,
-    padding: 10,
-    marginVertical: 10,
-  },
   error: {
     color: 'red',
     marginTop: 10,

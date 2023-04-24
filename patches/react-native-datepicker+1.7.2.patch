@@ -1,0 +1,35 @@
+diff --git a/node_modules/react-native-datepicker/datepicker.js b/node_modules/react-native-datepicker/datepicker.js
+index ac6cacd..860c6e1 100644
+--- a/node_modules/react-native-datepicker/datepicker.js
++++ b/node_modules/react-native-datepicker/datepicker.js
+@@ -8,11 +8,11 @@ import {
+   TouchableHighlight,
+   DatePickerAndroid,
+   TimePickerAndroid,
+-  DatePickerIOS,
+   Platform,
+   Animated,
+   Keyboard
+ } from 'react-native';
++import DateTimePicker from '@react-native-community/datetimepicker';
+ import Style from './style';
+ import Moment from 'moment';
+ 
+@@ -391,7 +391,7 @@ class DatePicker extends Component {
+                     style={[Style.datePickerCon, {height: this.state.animatedHeight}, customStyles.datePickerCon]}
+                   >
+                     <View pointerEvents={this.state.allowPointerEvents ? 'auto' : 'none'}>
+-                      <DatePickerIOS
++                      <DateTimePicker
+                         date={this.state.date}
+                         mode={mode}
+                         minimumDate={minDate && this.getDate(minDate)}
+@@ -443,7 +443,7 @@ DatePicker.defaultProps = {
+   mode: 'date',
+   androidMode: 'default',
+   date: '',
+-  // component height: 216(DatePickerIOS) + 1(borderTop) + 42(marginTop), IOS only
++  // component height: 216(DateTimePicker) + 1(borderTop) + 42(marginTop), IOS only
+   height: 259,
+ 
+   // slide animation duration time, default to 300ms, IOS only
