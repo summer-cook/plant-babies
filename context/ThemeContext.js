@@ -1,11 +1,18 @@
 import { createContext } from 'react';
 
+// TODO: use colors everywhere
+const colors = {
+  green: '#007AFF',
+  blue: '#AAC9CF',
+  red: '#d99eb3',
+  periwinkle: '#a1a7c9',
+  backgroundGrey: '#F5F5F5',
+  borderGrey: '#E2E2E2',
+  darkGrey: '#6D6D6D',
+  white: '#ffffff'
+}
 const theme = {
-  colors: {
-    primary: '#007AFF',
-    secondary: '#6D6D6D',
-    background: '#F5F5F5',
-  },
+  colors: colors,
   center: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -13,13 +20,18 @@ const theme = {
   input: {
     borderWidth: 1,
     padding: 10,
-    borderRadius: 10,
-    borderColor: '#E2E2E2',
-    backgroundColor: '#ffffff'
+    borderRadius: 4,
+    borderColor: colors.borderGrey,
+    backgroundColor: colors.white
   },
   formItemSpacing: {
     width: '80%',
     marginVertical: 4,
+  },
+  flexForm: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 };
 

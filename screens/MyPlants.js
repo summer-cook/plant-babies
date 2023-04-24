@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { AuthContext } from '../context/AuthContext';
 import { ScrollView, StyleSheet, Text, View } from "react-native"
-import PlantListItem from "../components/PlantListItem"
 import { getDatabase, ref, onValue } from 'firebase/database'
 import { getAuth } from 'firebase/auth'
+import { ThemeContext } from '../context/ThemeContext';
+import PlantListItem from "../components/PlantListItem"
 
 const MyPlants = () => {
   const [isLoading, setLoading] = useState(true)
   const [plants, setPlants] = useState([])
   const { user } = useContext(AuthContext);
   const auth = getAuth()
-  console.log(user)
 
   useEffect(() => {
     if (user) {
@@ -19,6 +19,7 @@ const MyPlants = () => {
         const data = snapshot.val()
         if (data) {
           const plantList = Object.entries(data).map(([key, value]) => ({id: key, ...value}))
+          plantList.sort((a, b) => new Date(a.lastTimeWatered) - new Date(b.lastTimeWatered)) // sort plants by lastTimeWatered
           setPlants(plantList)
           setLoading(false)
         }
@@ -29,14 +30,12 @@ const MyPlants = () => {
   return (
     <ScrollView contentContainerStyle={!user && styles.container}>
       {user ? (plants.map((plant, index) => {
-        return(
+        return (
           <PlantListItem
             key={index}
             id={plant.id}
             plant={plant}
-            style={{
-              backgroundColor: index % 2 === 0 ? '#000' : '#ccc'
-            }}
+            index={index}
           />
         )
       })) : (
