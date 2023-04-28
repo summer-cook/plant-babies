@@ -14,6 +14,7 @@ import FormButtonGroup from "../components/FormButtonGroup"
 
 const NewPlant = () => {
   const [image, setImage] = useState(null)
+  const [imageDownloadUrl, setImageDownloadUrl] = useState(null)
   const [name, setName] = useState(null)
   const [wateringFrequency, setWateringFrequency] = useState(null)
   const [weeklyOrMonthly, setWeeklyOrMonthly] = useState(null)
@@ -49,27 +50,8 @@ const NewPlant = () => {
       quality: 1,
       // 0 means compress for small size, 1 means compress for maximum quality
     })
-    // note that logging the full result throws a warning about Cancelled being deprecated
-    console.log(result)
     if (!result.canceled) {
       setImage(result.assets[0].uri)
-    }
-  }
-
-  const uploadImage = async () => {
-    try {
-      setUploading(true)
-      const response = await fetch(image)
-      const blob = await response.blob()
-      const imageId = Math.random().toString(36).substring(7)
-      const ref = firebase.storage().ref().child(`plant-pics/${imageId}`)
-      await ref.put(blob)
-      const downloadUrl = await ref.getDownloadURL()
-      console.log(downloadUrl)
-      setUploading(false)
-    } catch (error) {
-      console.log(error)
-      setUploading(false)
     }
   }
 
@@ -84,27 +66,46 @@ const NewPlant = () => {
     ])
   }
 
-  const savePlantToFirebase = (name, description, image, lastTimeWatered, wateringFrequency, weeklyOrMonthly) => {
+  const createPlantInFirebaseDb = (name, description, imageDownloadUrl, lastTimeWatered, wateringFrequency, weeklyOrMonthly) => {
     const newPlantRef = firebase.database().ref(`users/${user.uid}/plants`).push()
     const newPlant = {
       id: newPlantRef.key,
       name,
       description,
-      image,
+      image: imageDownloadUrl,
       lastTimeWatered,
       wateringFrequency,
       weeklyOrMonthly
     }
     newPlantRef.set(newPlant)
       .then(() => {
+        console.log(newPlant)
         alert('Plant saved!!')
         resetNewPlantForm()
       })
       .catch(error => console.error(error))
   }
 
+  const uploadImageAndSavePlant = async () => {
+    try {
+      setUploading(true)
+      const response = await fetch(image)
+      const blob = await response.blob()
+      const imageId = Math.random().toString(36).substring(7)
+      const ref = firebase.storage().ref().child(`plant-pics/${imageId}`)
+      await ref.put(blob)
+      const downloadUrl = await ref.getDownloadURL()
+      await setImageDownloadUrl(downloadUrl)
+      await createPlantInFirebaseDb(name, description, imageDownloadUrl, lastTimeWatered, wateringFrequency, weeklyOrMonthly)
+      setUploading(false)
+    } catch (error) {
+      console.log(error)
+      setUploading(false)
+    }
+  }
+
   function handleSubmit() {
-    savePlantToFirebase(name, description, image, lastTimeWatered, wateringFrequency, weeklyOrMonthly);
+    uploadImageAndSavePlant();
   }
 
   // TODO add the rest of the new plant form.
@@ -208,8 +209,7 @@ const NewPlant = () => {
           />
         }
         <Button title='Select Image' onPress={pickImage} />
-        {!uploading ?
-          <Button title='Upload Image' onPress={uploadImage} /> :
+        {uploading &&
           <ActivityIndicator size={'small'} color='black' />
         }
       <FormButtonGroup
