@@ -14,6 +14,9 @@
 ## Install dependencies
 - `npx expo install`
 
+## Apply Patches for Dependency Warnings
+- `npx patch-package`
+
 ## Troubleshooting
 - If you see the following when starting the app:
   - `Error: error:0308010C:digital envelope routines::unsupported`
