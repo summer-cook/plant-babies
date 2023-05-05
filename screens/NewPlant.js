@@ -96,6 +96,8 @@ const NewPlant = () => {
       await ref.put(blob)
       const downloadUrl = await ref.getDownloadURL()
       await setImageDownloadUrl(downloadUrl)
+      // no idea why but it wasnt saving when i wasn't logging it 🤷🏽‍♀️
+      await console.log(imageDownloadUrl)
       await createPlantInFirebaseDb(name, description, imageDownloadUrl, lastTimeWatered, wateringFrequency, weeklyOrMonthly)
       setUploading(false)
     } catch (error) {

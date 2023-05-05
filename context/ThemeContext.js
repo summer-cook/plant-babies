@@ -9,6 +9,7 @@ const colors = {
   backgroundGrey: '#F5F5F5',
   borderGrey: '#E2E2E2',
   darkGrey: '#6D6D6D',
+  mediumGrey: '#a6a7ab',
   white: '#ffffff'
 }
 const theme = {

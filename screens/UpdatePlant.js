@@ -3,6 +3,7 @@ import { View, Text } from 'react-native'
 import { getAuth } from 'firebase/auth'
 import { AuthContext } from '../context/AuthContext'
 import { ThemeContext } from '../context/ThemeContext'
+import CustomButton from "../components/CustomButton";
 //import PlantForm from "../components/PlantForm"
 
 const UpdatePlant = ({ route, navigation }) => {
@@ -20,6 +21,9 @@ const UpdatePlant = ({ route, navigation }) => {
         wateringFrequency={wateringFrequency}
         weeklyOrMonthly={weeklyOrMonthly}
       /> */}
+      <CustomButton
+        onPress={() => navigation.goBack()}
+        title="Go back home" />
     </View>
   )
 }

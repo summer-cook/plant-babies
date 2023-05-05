@@ -1,67 +1,228 @@
-import React, { useContext } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import CustomButton from '../components/CustomButton'
+import DatePicker from 'react-native-datepicker'
+import { ThemeContext } from '../context/ThemeContext'
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { FontAwesome } from '@expo/vector-icons';
+import { app } from '../firebaseConfig';
+import { getDatabase, ref, update, remove } from "firebase/database";
+import { today } from '../utils/utilityFunctions'
+import { AuthContext } from '../context/AuthContext'
 import {
   ScrollView,
   StyleSheet,
   Image,
   Text,
   Button,
-  View
+  View,
+  TextInput
 } from "react-native";
-import { ThemeContext } from '../context/ThemeContext'
-import { TouchableOpacity } from "react-native-gesture-handler";
 
-function Plant({ route, navigation }) {
+function Plant({ route, navigation, refreshPlants }) {
   const plant = route.params.plant;
+  const db = getDatabase(app);
+  const { user } = useContext(AuthContext)
   const theme = useContext(ThemeContext)
+
+  const [isPlantDeleted, setIsPlantDeleted] = useState(false);
+  const [editingName, setEditingName] = useState(false);
+  const [editingLastTimeWatered, setEditingLastTimeWatered] = useState(false);
+  const [editingDescription, setEditingDescription] = useState(false);
+  const [editedName, setEditedName] = useState(plant.name);
+  const [editedLastTimeWatered, setEditedLastTimeWatered] = useState(plant.lastTimeWatered);
+  const [editedDescription, setEditedDescription] = useState(plant.description);
+
+  const handleEdit = (field) => {
+    switch(field) {
+      case 'name':
+        setEditingName(true);
+        break;
+      case 'lastTimeWatered':
+        setEditingLastTimeWatered(true);
+        break;
+      case 'description':
+        setEditingDescription(true);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleSave = (field) => {
+    switch(field) {
+      case 'name':
+        plant.name = editedName;
+        setEditingName(false);
+        update(ref(db, `users/${user.uid}/plants/${plant.id}`), { name: editedName });
+        break;
+      case 'lastTimeWatered':
+        plant.lastTimeWatered = editedLastTimeWatered;
+        setEditingLastTimeWatered(false);
+        update(ref(db, `users/${user.uid}/plants/${plant.id}`), { lastTimeWatered: editedLastTimeWatered });
+        break;
+      case 'description':
+        plant.description = editedDescription;
+        setEditingDescription(false);
+        update(ref(db, `users/${user.uid}/plants/${plant.id}`), { description: editedDescription });
+        break;
+      default:
+        break;
+    }
+  }
+
+  const deletePlant = async (plantId) => {
+    const plantRef = ref(db, `users/${user.uid}/plants/${plantId}`);
+    try {
+      await remove(plantRef)
+      // to do - navigate back to MyPlants
+      console.log(route.params)
+      //route.params.refreshPlants
+      navigation.goBack()
+      console.log(`Plant with ID ${plantId} has been deleted.`)
+    } catch (error) {
+      console.error(`Error deleting plant with ID ${plantId}: `, error);
+    }
+  }
+
   return (
     <ScrollView>
-    <View style={styles.plantContainer}>
-      <View style={styles.plantInfo}>
-        <Image
-          style={styles.plantImage}
-          source={{
-            uri: plant.image
-          }}
-        />
-        <View>
-          <Text style={styles.plantName}>
-            {plant.name[0].toUpperCase()}{plant.name.slice(1)}
-          </Text>
-        </View>
-        <View>
-          <Text style={styles.lastWateredText}>
-              Last watered: {plant.last_time_watered}
-          </Text>
-          <Text style={styles.wateringText}>
+      <View style={styles.plantContainer}>
+        <View style={styles.plantInfo}>
+          <Image
+            style={styles.plantImage}
+            source={{
+              uri: plant.image
+            }}
+          />
+          <View style={styles.spacing}>
+            {editingName ? (
+              <TextInput
+                style={[styles.plantName, styles.text]}
+                value={editedName}
+                onChangeText={(text) => setEditedName(text)}
+                onSubmitEditing={() => handleSave('name')}
+              />
+            ) : (
+              <>
+                <Text style={[styles.plantName, styles.text]}>
+                  {plant.name[0].toUpperCase()}{plant.name.slice(1)}
+                  <TouchableOpacity onPress={() => handleEdit('name')}>
+                    <FontAwesome
+                      name="pencil"
+                      size={14}
+                      color={theme.colors.mediumGrey}
+                      style={styles.pencilIcon}
+                    />
+                  </TouchableOpacity>
+                </Text>
+              </>
+            )}
+          </View>
+          <View style={styles.spacing}>
+            <Text style={[styles.lastWateredText, styles.text]}>
+              Last watered:
+            </Text>
+            <DatePicker
+              useNativeDriver={true}
+              date={editedLastTimeWatered}
+              mode="date"
+              placeholder="Last time you watered this plant?"
+              format="YYYY-MM-DD"
+              minDate="2020-01-01"
+              maxDate={today()}
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              style={[{width: '80%'}, styles.lastWateredText, styles.text]}
+              customStyles={{
+                dateIcon: {
+                  display: 'none'
+                },
+                dateInput: {
+                  borderColor: 'transparent',
+                  textAlign: 'center'
+                },
+              }}
+              onDateChange={(date) => {
+                setEditedLastTimeWatered(date)
+                handleSave('lastTimeWatered')
+              }}
+            />
+            <FontAwesome
+              name="pencil"
+              size={14}
+              color={theme.colors.mediumGrey}
+              style={styles.pencilIcon}
+            />
+            {/* {!editingLastTimeWatered &&
+                                <FontAwesome
+                                name="pencil"
+                                size={14}
+                                color={theme.colors.mediumGrey}
+                                style={styles.pencilIcon}
+                              />
+             } */}
+                {/* <Text style={[styles.lastWateredText, styles.text]}>
+                    Last watered: {plant.lastTimeWatered}
+                  <TouchableOpacity onPress={() => handleEdit('lastTimeWatered')}>
+                    <FontAwesome
+                      name="pencil"
+                      size={14}
+                      color={theme.colors.mediumGrey}
+                      style={styles.pencilIcon}
+                    />
+                  </TouchableOpacity>
+                </Text>
+              </> */}
+          </View>
+          <Text style={[styles.wateringText, styles.text, styles.spacing]}>
             Needs watering today 💚
           </Text>
-          <Text style={styles.description}>
-            {plant.description}
-          </Text>
+          <View style={styles.spacing}>
+          {editingDescription ? (
+              <TextInput
+                style={styles.text}
+                value={editedDescription}
+                onChangeText={(text) => setEditedDescription(text)}
+                onSubmitEditing={() => handleSave('description')}
+              />
+            ) : (
+              <>
+                <Text style={styles.text}>
+                  {plant.description}
+                  <TouchableOpacity onPress={() => handleEdit('description')}>
+                    <FontAwesome
+                      name="pencil"
+                      size={14}
+                      color={theme.colors.mediumGrey}
+                      style={styles.pencilIcon}
+                    />
+                  </TouchableOpacity>
+                </Text>
+              </>
+            )}
+          </View>
         </View>
       </View>
-      <CustomButton
-        title='Water Now'
-        onPress={() => navigation.goBack()}
-        fontSize={20}
-      />
-      <CustomButton
-        title='Update Plant'
-        onPress={() => navigation.navigate('UpdatePlant', {plant: plant})}
-        backgroundColor={theme.colors.periwinkle}
-      />
-      <CustomButton
-        title='Delete Plant'
-        onPress={() => navigation.goBack()}
-        backgroundColor={theme.colors.red}
-      />
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text style={styles.goBackLink}>
-          Go back to my plants
-        </Text>
-      </TouchableOpacity>
+      <View>
+        <View style={styles.spacing}>
+          <CustomButton
+            title='Water Now'
+            onPress={() => navigation.goBack()}
+            fontSize={20}
+          />
+            <CustomButton
+              title='Delete Plant'
+              onPress={() => deletePlant(plant.id)}
+              backgroundColor={theme.colors.red}
+            />
+        </View>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.goBackLink}>
+            Go back to my plants
+          </Text>
+        </TouchableOpacity>
       </View>
+
     </ScrollView>
   );
 }
@@ -72,19 +233,16 @@ const styles = StyleSheet.create({
   plantContainer: {
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    backgroundColor: '#FFFFFF',
     paddingVertical: 0,
     flex:1
   },
   plantInfo: {
-    textAlign: 'center',
     width: 300,
   },
   plantName: {
     paddingTop: 20,
     fontSize: 30,
     color: '#333432',
-    textAlign: 'center',
   },
   plantImage: {
     width: 300,
@@ -94,15 +252,12 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   lastWateredText: {
-    paddingTop: 10,
     fontFamily: 'Comfortaa_300Light',
     fontSize: 16,
-    textAlign: 'center'
   },
   wateringText: {
     color: '#333432',
     fontSize: 14,
-    textAlign: 'center'
   },
   waterPlantButton: {
     fontSize: 20
@@ -110,8 +265,14 @@ const styles = StyleSheet.create({
   goBackLink: {
     fontSize: 14
   },
-  description: {
+  text: {
     textAlign: 'center',
-    paddingVertical: 10
+  },
+  pencilIcon: {
+    marginTop: 6,
+    marginLeft: 8
+  },
+  spacing: {
+    paddingTop: 5
   }
 });

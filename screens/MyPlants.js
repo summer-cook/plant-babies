@@ -11,6 +11,7 @@ const MyPlants = () => {
   const [plants, setPlants] = useState([])
   const { user } = useContext(AuthContext);
   const auth = getAuth()
+  const [refreshPlants, setRefreshPlants] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -25,7 +26,7 @@ const MyPlants = () => {
         }
       })
     }
-  }, [])
+  }, [refreshPlants])
 
   return (
     <ScrollView contentContainerStyle={!user && styles.container}>
@@ -36,6 +37,7 @@ const MyPlants = () => {
             id={plant.id}
             plant={plant}
             index={index}
+            setRefreshPlants={setRefreshPlants}
           />
         )
       })) : (
