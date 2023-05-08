@@ -6,12 +6,15 @@ import { getAuth } from 'firebase/auth'
 import { ThemeContext } from '../context/ThemeContext';
 import PlantListItem from "../components/PlantListItem"
 
-const MyPlants = () => {
+const MyPlants = ({ navigation, route }) => {
   const [isLoading, setLoading] = useState(true)
   const [plants, setPlants] = useState([])
   const { user } = useContext(AuthContext);
   const auth = getAuth()
   const [refreshPlants, setRefreshPlants] = useState(false)
+  const plantDeleted = route.params?.plantDeleted
+  console.log(route.params)
+  console.log(route)
 
   useEffect(() => {
     if (user) {
@@ -26,7 +29,7 @@ const MyPlants = () => {
         }
       })
     }
-  }, [refreshPlants])
+  }, [plantDeleted])
 
   return (
     <ScrollView contentContainerStyle={!user && styles.container}>
@@ -37,7 +40,6 @@ const MyPlants = () => {
             id={plant.id}
             plant={plant}
             index={index}
-            setRefreshPlants={setRefreshPlants}
           />
         )
       })) : (

@@ -8,7 +8,7 @@ import AppLoading from 'expo-app-loading';
 import { today, getWateringText, timeSince } from '../utils/utilityFunctions'
 import { ThemeContext } from '../context/ThemeContext';
 
-function PlantListItem({ setRefreshPlants, plant, index}) {
+function PlantListItem({ plant, index}) {
   const navigation = useNavigation();
   const theme = useContext(ThemeContext);
 
@@ -25,7 +25,9 @@ function PlantListItem({ setRefreshPlants, plant, index}) {
       }}
     >
       <TouchableOpacity
-        onPress={() => navigation.navigate('Plant', {plant: plant, refreshPlants: refreshPlants})}>
+        onPress={() =>
+          navigation.navigate('Plant', {plant: plant}
+        )}>
         <Image
           style={styles.plantImage}
           source={{

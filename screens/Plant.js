@@ -18,13 +18,13 @@ import {
   TextInput
 } from "react-native";
 
-function Plant({ route, navigation, refreshPlants }) {
+function Plant({ route, navigation }) {
   const plant = route.params.plant;
   const db = getDatabase(app);
   const { user } = useContext(AuthContext)
   const theme = useContext(ThemeContext)
 
-  const [isPlantDeleted, setIsPlantDeleted] = useState(false);
+  const [plantDeleted, setPlantDeleted] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const [editingLastTimeWatered, setEditingLastTimeWatered] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
@@ -75,10 +75,11 @@ function Plant({ route, navigation, refreshPlants }) {
     try {
       await remove(plantRef)
       // to do - navigate back to MyPlants
-      console.log(route.params)
       //route.params.refreshPlants
-      navigation.goBack()
-      console.log(`Plant with ID ${plantId} has been deleted.`)
+      await setPlantDeleted(true)
+      await navigation.navigate(
+        'MyPlants', {plantDeleted: plantDeleted})
+      console.log(`Plant with ID ${plantId} has been deleted. ${plantDeleted}`)
     } catch (error) {
       console.error(`Error deleting plant with ID ${plantId}: `, error);
     }
