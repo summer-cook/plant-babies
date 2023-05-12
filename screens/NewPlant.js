@@ -14,7 +14,6 @@ import FormButtonGroup from "../components/FormButtonGroup"
 
 const NewPlant = () => {
   const [image, setImage] = useState(null)
-  const [imageDownloadUrl, setImageDownloadUrl] = useState(null)
   const [name, setName] = useState(null)
   const [wateringFrequency, setWateringFrequency] = useState(null)
   const [weeklyOrMonthly, setWeeklyOrMonthly] = useState(null)
@@ -66,13 +65,13 @@ const NewPlant = () => {
     ])
   }
 
-  const createPlantInFirebaseDb = (name, description, imageDownloadUrl, lastTimeWatered, wateringFrequency, weeklyOrMonthly) => {
+  const createPlantInFirebaseDb = (imageFile) => {
     const newPlantRef = firebase.database().ref(`users/${user.uid}/plants`).push()
     const newPlant = {
       id: newPlantRef.key,
       name,
       description,
-      image: imageDownloadUrl,
+      image: imageFile,
       lastTimeWatered,
       wateringFrequency,
       weeklyOrMonthly
@@ -86,28 +85,28 @@ const NewPlant = () => {
       .catch(error => console.error(error))
   }
 
-  const uploadImageAndSavePlant = async () => {
+  const uploadImage = async () => {
     try {
-      setUploading(true)
       const response = await fetch(image)
       const blob = await response.blob()
       const imageId = Math.random().toString(36).substring(7)
       const ref = firebase.storage().ref().child(`plant-pics/${imageId}`)
       await ref.put(blob)
-      const downloadUrl = await ref.getDownloadURL()
-      await setImageDownloadUrl(downloadUrl)
-      // no idea why but it wasnt saving when i wasn't logging it 🤷🏽‍♀️
-      await console.log(imageDownloadUrl)
-      await createPlantInFirebaseDb(name, description, imageDownloadUrl, lastTimeWatered, wateringFrequency, weeklyOrMonthly)
-      setUploading(false)
+      let downloadUrl = await ref.getDownloadURL()
+      console.log(downloadUrl, 'downloadUrl')
+      return downloadUrl
     } catch (error) {
       console.log(error)
       setUploading(false)
     }
   }
 
-  function handleSubmit() {
-    uploadImageAndSavePlant();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setUploading(true)
+    const imageFile = await uploadImage()
+    createPlantInFirebaseDb(imageFile)
+    setUploading(false)
   }
 
   // TODO add the rest of the new plant form.
@@ -144,7 +143,6 @@ const NewPlant = () => {
             initValue="1"
             onChange={(option)=>{
               setWateringFrequency(option.label)
-              alert(`you selected ${option.label}`)
             }}
           >
           <TextInput
@@ -164,7 +162,6 @@ const NewPlant = () => {
             initValue="Weekly"
             onChange={(option)=>{
               setWeeklyOrMonthly(option.label)
-              alert(`you selected ${option.label}`)
             }}
           >
             <TextInput
