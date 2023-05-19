@@ -119,7 +119,7 @@ function Plant({ route, navigation }) {
               </>
             )}
           </View>
-          <View style={styles.spacing}>
+          <View style={[styles.spacing, styles.flexForm]}>
             <Text style={[styles.lastWateredText, styles.text]}>
               Last watered:
             </Text>
@@ -133,14 +133,14 @@ function Plant({ route, navigation }) {
               maxDate={today()}
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
-              style={[{width: '80%'}, styles.lastWateredText, styles.text]}
+              style={[{width: '28%'}, styles.text]}
               customStyles={{
                 dateIcon: {
                   display: 'none'
                 },
                 dateInput: {
                   borderColor: 'transparent',
-                  textAlign: 'center'
+                  alignItems: 'flex-start',
                 },
               }}
               onDateChange={(date) => {
@@ -154,26 +154,6 @@ function Plant({ route, navigation }) {
               color={theme.colors.mediumGrey}
               style={styles.pencilIcon}
             />
-            {/* {!editingLastTimeWatered &&
-                                <FontAwesome
-                                name="pencil"
-                                size={14}
-                                color={theme.colors.mediumGrey}
-                                style={styles.pencilIcon}
-                              />
-             } */}
-                {/* <Text style={[styles.lastWateredText, styles.text]}>
-                    Last watered: {plant.lastTimeWatered}
-                  <TouchableOpacity onPress={() => handleEdit('lastTimeWatered')}>
-                    <FontAwesome
-                      name="pencil"
-                      size={14}
-                      color={theme.colors.mediumGrey}
-                      style={styles.pencilIcon}
-                    />
-                  </TouchableOpacity>
-                </Text>
-              </> */}
           </View>
           <Text style={[styles.wateringText, styles.text, styles.spacing]}>
             Needs watering today 💚
@@ -205,20 +185,19 @@ function Plant({ route, navigation }) {
         </View>
       </View>
       <View>
-        <View style={styles.spacing}>
+        <View style={[styles.spacingLarge, styles.flexForm, {justifyContent: 'space-around'}]}>
           <CustomButton
             title='Water Now'
             onPress={() => navigation.goBack()}
-            fontSize={20}
           />
-            <CustomButton
-              title='Delete Plant'
-              onPress={() => deletePlant(plant.id)}
-              backgroundColor={theme.colors.red}
-            />
+          <CustomButton
+            title='Delete Plant'
+            onPress={() => deletePlant(plant.id)}
+            backgroundColor={theme.colors.red}
+          />
         </View>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.goBackLink}>
+          <Text style={[styles.goBackLink, styles.text, styles.spacingLarge]}>
             Go back to my plants
           </Text>
         </TouchableOpacity>
@@ -246,7 +225,6 @@ const styles = StyleSheet.create({
     color: '#333432',
   },
   plantImage: {
-    width: 300,
     height: 300,
     borderRadius: 5,
     borderColor: '#E5E5E5',
@@ -255,13 +233,11 @@ const styles = StyleSheet.create({
   lastWateredText: {
     fontFamily: 'Comfortaa_300Light',
     fontSize: 16,
+    marginRight: 5
   },
   wateringText: {
     color: '#333432',
     fontSize: 14,
-  },
-  waterPlantButton: {
-    fontSize: 20
   },
   goBackLink: {
     fontSize: 14
@@ -275,5 +251,14 @@ const styles = StyleSheet.create({
   },
   spacing: {
     paddingTop: 5
+  },
+  spacingLarge: {
+    paddingTop: 20
+  },
+  flexForm: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
