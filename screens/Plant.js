@@ -87,14 +87,17 @@ function Plant({ route, navigation }) {
 
   return (
     <ScrollView>
+
       <View style={styles.plantContainer}>
-        <View style={styles.plantInfo}>
+        <View style={styles.plantImage}>
           <Image
-            style={styles.plantImage}
+            style={theme.fullWidth}
             source={{
               uri: plant.image
             }}
           />
+        </View>
+        <View style={styles.plantInfo}>
           <View style={styles.spacing}>
             {editingName ? (
               <TextInput
@@ -105,22 +108,24 @@ function Plant({ route, navigation }) {
               />
             ) : (
               <>
-                <Text style={[styles.plantName, styles.text]}>
-                  {plant.name[0].toUpperCase()}{plant.name.slice(1)}
-                  <TouchableOpacity onPress={() => handleEdit('name')}>
+                <TouchableOpacity onPress={() => handleEdit('name')}>
+                  <View style={theme.flexForm}>
+                    <Text style={[styles.plantName, styles.text]}>
+                    {plant.name[0].toUpperCase()}{plant.name.slice(1)}
+                    </Text>
                     <FontAwesome
                       name="pencil"
                       size={14}
                       color={theme.colors.mediumGrey}
-                      style={styles.pencilIcon}
+                      style={styles.pencilIconLargeText}
                     />
-                  </TouchableOpacity>
-                </Text>
+                  </View>
+                </TouchableOpacity>
               </>
             )}
           </View>
-          <View style={[styles.spacing, styles.flexForm]}>
-            <Text style={[styles.lastWateredText, styles.text]}>
+          <View style={[styles.spacing, theme.flexForm]}>
+            <Text style={styles.text}>
               Last watered:
             </Text>
             <DatePicker
@@ -133,7 +138,7 @@ function Plant({ route, navigation }) {
               maxDate={today()}
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
-              style={[{width: '28%'}, styles.text]}
+              style={[{width: '27%'}, styles.text]}
               customStyles={{
                 dateIcon: {
                   display: 'none'
@@ -141,6 +146,7 @@ function Plant({ route, navigation }) {
                 dateInput: {
                   borderColor: 'transparent',
                   alignItems: 'flex-start',
+                  marginLeft: 4
                 },
               }}
               onDateChange={(date) => {
@@ -168,33 +174,34 @@ function Plant({ route, navigation }) {
               />
             ) : (
               <>
-                <Text style={styles.text}>
-                  {plant.description}
-                  <TouchableOpacity onPress={() => handleEdit('description')}>
+                <TouchableOpacity onPress={() => handleEdit('description')}>
+                  <View style={theme.flexForm}>
+                    <Text style={styles.text}>
+                      {plant.description}
+                    </Text>
                     <FontAwesome
                       name="pencil"
                       size={14}
                       color={theme.colors.mediumGrey}
                       style={styles.pencilIcon}
                     />
-                  </TouchableOpacity>
-                </Text>
+                  </View>
+                </TouchableOpacity>
               </>
             )}
           </View>
-        </View>
       </View>
       <View>
-        <View style={[styles.spacingLarge, styles.flexForm, {justifyContent: 'space-around'}]}>
+        <View style={[styles.spacingLarge, theme.flexForm, {justifyContent: 'space-around'}]}>
           <CustomButton
             title='Water Now'
             onPress={() => navigation.goBack()}
-          />
+            />
           <CustomButton
             title='Delete Plant'
             onPress={() => deletePlant(plant.id)}
             backgroundColor={theme.colors.red}
-          />
+            />
         </View>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={[styles.goBackLink, styles.text, styles.spacingLarge]}>
@@ -202,6 +209,7 @@ function Plant({ route, navigation }) {
           </Text>
         </TouchableOpacity>
       </View>
+    </View>
 
     </ScrollView>
   );
@@ -225,10 +233,11 @@ const styles = StyleSheet.create({
     color: '#333432',
   },
   plantImage: {
-    height: 300,
-    borderRadius: 5,
+    width: '100%',
+    height: 250,
     borderColor: '#E5E5E5',
-    borderWidth: 2,
+    borderBottomWidth: 2,
+    borderTopWidth: 2,
   },
   lastWateredText: {
     fontFamily: 'Comfortaa_300Light',
@@ -245,9 +254,13 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
   },
-  pencilIcon: {
+  pencilIconLargeText: {
     marginTop: 6,
-    marginLeft: 8
+    marginLeft: 8,
+  },
+  pencilIcon: {
+    marginBottom: 18,
+    marginLeft: 8,
   },
   spacing: {
     paddingTop: 5
@@ -255,10 +268,4 @@ const styles = StyleSheet.create({
   spacingLarge: {
     paddingTop: 20
   },
-  flexForm: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
 });

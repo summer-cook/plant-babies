@@ -30,10 +30,15 @@ const theme = {
     marginVertical: 4,
   },
   flexForm: {
+    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center'
   },
+  fullWidth: {
+    width: '100%',
+    height: '100%',
+  }
 };
 
 export const ThemeContext = createContext(theme);
